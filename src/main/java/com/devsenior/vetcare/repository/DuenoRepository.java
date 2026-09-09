@@ -9,4 +9,6 @@ import com.devsenior.vetcare.model.Dueno;
 
 public interface DuenoRepository extends JpaRepository<Dueno, Long> {
     Optional<Dueno> findByEmail(String email);
+    boolean existsByEmail(String email);
+    boolean existsByDocumento(String documento);
 }
