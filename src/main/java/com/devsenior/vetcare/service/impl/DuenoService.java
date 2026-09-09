@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 
 import com.devsenior.vetcare.dto.request.DuenoRequestDTO;
 import com.devsenior.vetcare.dto.response.DuenoResponseDTO;
+import com.devsenior.vetcare.exception.DocumentoExistenteException;
+import com.devsenior.vetcare.exception.DuenoNoEncontradoException;
+import com.devsenior.vetcare.exception.EmailExistenteException;
 import com.devsenior.vetcare.model.Dueno;
 import com.devsenior.vetcare.repository.DuenoRepository;
 import com.devsenior.vetcare.service.IDuenoService;
@@ -35,14 +38,14 @@ public class DuenoService implements IDuenoService {
     @Override
     public DuenoResponseDTO obtenerDuenoPorId(Long id) {
         Dueno duenoEncontrado = duenoRepository.findById(id)
-                                                .orElseThrow(() -> new RuntimeException());
+                                                .orElseThrow(() -> new DuenoNoEncontradoException(id));
         return mapToDuenoResponseDTO(duenoEncontrado);
     }
 
     @Override
     public DuenoResponseDTO actualizarDueno(Long id, DuenoRequestDTO duenoRequestDTO) {
         Dueno duenoEncontrado = duenoRepository.findById(id)
-                                                .orElseThrow(() -> new RuntimeException());
+                                                .orElseThrow(() -> new DuenoNoEncontradoException(id));
         validarDocumentoYEmail(duenoRequestDTO);
         
         duenoEncontrado.setNombre(duenoRequestDTO.nombre());
@@ -58,7 +61,7 @@ public class DuenoService implements IDuenoService {
     @Override
     public void eliminarDueno(Long id) {
         if (!duenoRepository.existsById(id)) {
-            throw new RuntimeException();
+            throw new DuenoNoEncontradoException(id);
         }
         duenoRepository.deleteById(id);
     }
@@ -86,10 +89,10 @@ public class DuenoService implements IDuenoService {
 
     private void validarDocumentoYEmail(DuenoRequestDTO duenoRequestDTO) {
         if (duenoRepository.existsByDocumento(duenoRequestDTO.documento())) {
-            throw new RuntimeException("Ya existe el documento: " + duenoRequestDTO.documento());
+            throw new DocumentoExistenteException(duenoRequestDTO.documento());
         }
         if (duenoRepository.existsByEmail(duenoRequestDTO.email())) {
-            throw new RuntimeException("Ya existe el email: " + duenoRequestDTO.email());
+            throw new EmailExistenteException(duenoRequestDTO.email());
         }
     }
 }
