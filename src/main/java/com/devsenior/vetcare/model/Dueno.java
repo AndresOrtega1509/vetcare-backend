@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,27 +25,22 @@ public class Dueno {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "El nombre del dueño no puede estar vacío")
     @Column(nullable = false, length = 50)
     private String nombre;
 
-    @NotBlank(message = "El apellido del dueño no puede estar vacío")
     @Column(nullable = false, length = 50)
     private String apellido;
 
-    @NotBlank(message = "El documento del dueño no puede estar vacío")
-    @Column(nullable = false, length = 20, unique = true)
+    @Column(nullable = false, length = 10, unique = true)
     private String documento;
 
-    @Column(length = 20)
+    @Column(length = 10)
     private String telefono;
 
-    @NotBlank(message = "El email del dueño no puede estar vacío")
     @Column(length = 100, unique = true, nullable = false)
     private String email;
 
     @OneToMany(mappedBy = "dueno", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder
-    .Default
+    @Builder.Default
     private List<Mascota> perros = new ArrayList<>();
 }
