@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.devsenior.vetcare.dto.request.DuenoRequestDTO;
 import com.devsenior.vetcare.dto.response.DuenoResponseDTO;
-import com.devsenior.vetcare.model.Dueno;
 import com.devsenior.vetcare.service.IDuenoService;
 
 import jakarta.validation.Valid;
