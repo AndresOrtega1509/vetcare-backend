@@ -62,13 +62,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
-    @ExceptionHandler(DuenoNoEncontradoException.class)
-    public ResponseEntity<ApiError> handleDuenoNotFoundException(DuenoNoEncontradoException ex, 
+    @ExceptionHandler(RecursoNoEncontradoException.class)
+    public ResponseEntity<ApiError> handleResourceNotFoundException(RecursoNoEncontradoException ex, 
                                                                             HttpServletRequest httpRequest) {
         ApiError errorResponse = ApiError.builder()
                                     .timestamp(LocalDateTime.now())
                                     .status(HttpStatus.NOT_FOUND.value())
-                                    .error("Dueno no encontrado")
+                                    .error("Recurso no encontrado")
                                     .message(ex.getMessage())
                                     .uri(httpRequest.getRequestURI())
                                     .build();

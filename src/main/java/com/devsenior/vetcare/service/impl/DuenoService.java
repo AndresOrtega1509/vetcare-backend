@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import com.devsenior.vetcare.dto.request.DuenoRequestDTO;
 import com.devsenior.vetcare.dto.response.DuenoResponseDTO;
 import com.devsenior.vetcare.exception.DocumentoExistenteException;
-import com.devsenior.vetcare.exception.DuenoNoEncontradoException;
+import com.devsenior.vetcare.exception.RecursoNoEncontradoException;
 import com.devsenior.vetcare.exception.EmailExistenteException;
 import com.devsenior.vetcare.model.Dueno;
 import com.devsenior.vetcare.repository.DuenoRepository;
@@ -38,14 +38,14 @@ public class DuenoService implements IDuenoService {
     @Override
     public DuenoResponseDTO obtenerDuenoPorId(Long id) {
         Dueno duenoEncontrado = duenoRepository.findById(id)
-                                                .orElseThrow(() -> new DuenoNoEncontradoException(id));
+                                                .orElseThrow(() -> new RecursoNoEncontradoException("Dueño", "ID", id));
         return mapToDuenoResponseDTO(duenoEncontrado);
     }
 
     @Override
     public DuenoResponseDTO actualizarDueno(Long id, DuenoRequestDTO duenoRequestDTO) {
         Dueno duenoEncontrado = duenoRepository.findById(id)
-                                                .orElseThrow(() -> new DuenoNoEncontradoException(id));
+                                                .orElseThrow(() -> new RecursoNoEncontradoException("Dueño", "ID", id));
         validarDocumentoYEmail(duenoRequestDTO);
         
         duenoEncontrado.setNombre(duenoRequestDTO.nombre());
@@ -61,7 +61,7 @@ public class DuenoService implements IDuenoService {
     @Override
     public void eliminarDueno(Long id) {
         if (!duenoRepository.existsById(id)) {
-            throw new DuenoNoEncontradoException(id);
+            throw new RecursoNoEncontradoException("Dueño", "ID", id);
         }
         duenoRepository.deleteById(id);
     }
